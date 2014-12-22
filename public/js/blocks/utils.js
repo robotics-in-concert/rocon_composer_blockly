@@ -1,3 +1,22 @@
+Blockly.JavaScript['declare_var'] = function(block){
+
+  // var key = Blockly.JavaScript.valueToCode(block, 'KEY', Blockly.JavaScript.ORDER_NONE) || "''";
+  var va = Blockly.JavaScript.valueToCode(block, 'VAR', Blockly.JavaScript.ORDER_NONE) || "''";
+  var tpl = "var <%= va %>;";
+  var code = _.template(tpl)({va: va});
+
+  return code;
+
+}
+Blockly.Blocks['declare_var'] = {
+  init: function() {
+    this.appendValueInput('VAR').appendField('Declare Variable');
+    this.setInputsInline(true);
+    this.contextMenu = false;
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+  }
+};
 /*
  * functions
  */

@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/g/bootstrap@3.3.1(css/bootstrap.min.css),highlight.js(styles/github.min.css)" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.2.0/css/font-awesome.min.css" />
+
+
+    <script type="text/javascript" src="//cdn.jsdelivr.net/g/jquery@2.1.1,angularjs@1.2.20,angular.ui-router,lodash,ramda,mousetrap,bootstrap@3.3.1,highlight.js,select2"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+      socket.on('msg', function(arg){
+        $('ul').append('<li>'+JSON.stringify(arg)+'</li>');
+
+      });
+
+    </script>
+
+  </head>
+
+  <body>
+    <ul>
+    </ul>
+  </body>
+
+</html>
+

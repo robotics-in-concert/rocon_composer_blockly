@@ -9,6 +9,9 @@ var _ = require('lodash'),
   MongoClient = require('mongodb').MongoClient,
   Engine = require('./engine');
   
+var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
 MongoClient.connect(process.env.ROCON_AUTHORING_MONGO_URL, function(e, db){
   if(e) throw e;
@@ -18,7 +21,6 @@ MongoClient.connect(process.env.ROCON_AUTHORING_MONGO_URL, function(e, db){
    * Express
    */
 
-  var app = express();
   app.use(express.static('public'));
   app.use(bodyParser.json({limit: '50mb'}));
 
@@ -31,15 +33,16 @@ MongoClient.connect(process.env.ROCON_AUTHORING_MONGO_URL, function(e, db){
   app.set('view cache', false);
   swig.setDefaults({ cache: false });
 
+  $engine = new Engine(db);
 
   require('./routes')(app, db);
+  require('./monitor')(io);
 
-  server = app.listen(process.env.ROCON_AUTHORING_SERVER_PORT, function(){
+  server = http.listen(process.env.ROCON_AUTHORING_SERVER_PORT, function(){
     console.log('Listening on port %d (%s)', server.address().port, process.env.NODE_ENV);
   });
 
 
-  $engine = new Engine(db);
 
   var args = process.argv.slice(1);
   if(args.length){

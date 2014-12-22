@@ -36,6 +36,12 @@ var Engine = function(db){
   var that = this;
   this.schedule_requests = {};
 
+
+  setInterval(function(){
+    engine.emit('engine:tick', new Date().getTime());
+
+  }, 3000);
+
   var retry_op = Utils.retry(function(){
     engine.log('trying to connect to ros ' + process.env.ROCON_AUTHORING_ROSBRIDGE_URL);
     var connected = false;
