@@ -162,4 +162,9 @@ module.exports = function(app, db){
 
   });
 
+  app.get('/monitoring', function(req, res){
+    res.render('monitoring');
+
+  });
+
 };
