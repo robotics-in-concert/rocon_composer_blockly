@@ -337,6 +337,7 @@ Blockly.JavaScript['variables_set'] = function(block) {
 var _js_init = Blockly.JavaScript.init;
 
 Blockly.JavaScript.init = function() {
+  variable_definitions = [];
   // Create a dictionary of definitions to be printed before the code.
   Blockly.JavaScript.definitions_ = Object.create(null);
   // Create a dictionary mapping desired function names in definitions_
