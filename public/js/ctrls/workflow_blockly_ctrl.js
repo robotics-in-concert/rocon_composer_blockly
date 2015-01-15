@@ -33,6 +33,9 @@ function WorkflowBlocklyCtrl($scope, blocksStore, $http, $rootScope, $stateParam
 
   };
 
+
+
+
   window.onbeforeunload = function(e){
     var dirty = checkDirty()
     if(dirty){
@@ -392,5 +395,188 @@ function WorkflowBlocklyCtrl($scope, blocksStore, $http, $rootScope, $stateParam
 
 
   };
+
+  var onBlocksChange = function(){
+    var ws = Blockly.mainWorkspace;
+    var m0 = ws.getMetrics();
+    // Blockly.svgResize();
+    // var scroll = {x: ws.scrollX, y: ws.scrollY};
+    var dx = Math.abs(m0.contentLeft - m0.viewLeft);
+    var dy = Math.abs(m0.contentTop - m0.viewTop);
+
+    var scroll = {x: dx, y: dy};
+    var myId = new Date().getTime();
+    console.log('.');
+
+
+    setTimeout(function(){
+      window.socket.emit('blockly:workspace:changed', {id: myId, metrics: ws.getMetrics(), scroll: scroll, xml: _xml()});
+    });
+
+  }
+
+
+
+  var _updateWorkspace = function(e){
+    console.log('UPDATE', e);
+
+    var ws = Blockly.mainWorkspace;
+    var m = e.metrics;
+    var m0 = ws.getMetrics();
+    var xml = e.xml;
+    dom = Blockly.Xml.textToDom(xml);
+
+
+    Blockly.mainWorkspace.clear();
+    $(xml).find('block[x]').each(function(){
+      var x = $(this).attr('x');
+      var y = $(this).attr('y');
+      // $(this).removeAttr('x');
+      // $(this).removeAttr('y');
+      $(this).attr('x', 0);
+      $(this).attr('y', 0);
+      var blockDom = this;
+      var dom = Blockly.Xml.domToBlock(ws, blockDom);
+      console.log('will move', x, y);
+
+      dom.moveBy(x, y);
+    });;
+    // Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+    // return;
+
+
+
+
+
+
+    // var x = (-m.contentLeft) - e.scroll.x;
+    // var y = (-m.contentTop) - e.scroll.y;
+
+
+
+    // ws.scrollbar.set(x, y);
+
+
+
+
+
+
+    var dx = Math.abs((-m.viewLeft) - 15);
+    var dy = Math.abs((-m.viewTop) - 15);
+    console.log('s', ws.scrollX - dx, ws.scrollY - dy);
+
+    // var dx = Math.abs(m0.contentLeft - m.viewLeft);
+    // var dy = Math.abs(m0.contentTop - m.viewTop);
+    // ws.scrollbar.set(ws.scrollX - dx, ws.scrollY - dy);
+    // ws.scrollbar.set(dx, dy);
+
+      // Blockly.svgResize();
+      // var dx = Math.abs(m0.contentLeft - m.viewLeft);
+      // var dy = Math.abs(m0.contentTop - m.viewTop);
+
+      // // ratio
+    var rx = dx / (m0.contentWidth - m.viewWidth);
+    var ry = dy / (m0.contentHeight - m.viewHeight);
+
+
+      // // scroll value
+      // // var sx = e.scroll.x * rx;
+      // // var sy = e.scroll.y * ry;
+    var sx = ws.scrollX * rx;
+    var sy = ws.scrollY * ry;
+
+
+
+      
+
+      // console.log('s', m0, m, dx, dy);
+
+        // ws.scrollbar.set(e.scroll.x, e.scroll.y);
+        // console.log('s');
+
+      
+
+    // setTimeout(function(){
+    // }, 1000);
+
+
+
+  };
+
+
+  var _joinChannel = function(name){
+    socket.emit('blockly:channel:join', {name: name}, function(data){
+      console.log('1');
+
+      if(data){
+      console.log('2');
+
+        _updateWorkspace(data);
+      }
+      console.log('joined', data);
+
+    });
+    blockly_remove_scrollbar();
+  };
+
+  $scope.selectChannel = function(){
+    var modalInstance = $modal.open({
+      templateUrl: '/js/tpl/modal/select_channel.html',
+      controller: 'SelectChannelCtrl',
+      controllerAs: 'ctrl'
+    });
+    modalInstance.result.then(function(selectedChannel){
+      _joinChannel(selectedChannel);
+
+    });
+
+  };
+
+
+  var socket = window.socket;
+  $('body').on('click', '.sync_lock', function(){
+    window.socket.emit('blockly:workspace:lock');
+  });
+
+
+  $('body').on('click', '.sync_join_channel', function(){
+    bootbox.prompt('Channel name?', function(n){
+      socket.emit('blockly:channel:join', {name: n}, function(data){
+        console.log('1');
+
+        if(data){
+        console.log('2');
+
+          _updateWorkspace(data);
+        }
+        console.log('joined', data);
+
+      });
+      blockly_remove_scrollbar();
+    });
+
+  });
+  $('body').on('click', '.sync_new_channel', function(){
+    bootbox.prompt('Channel name?', function(n){
+      socket.emit('blockly:channel:create', {name: n}, function(x){
+        console.log('create callback', arguments);
+        Blockly.mainWorkspace.clear();
+        blockly_remove_scrollbar();
+      });
+    });
+
+  });
+
+  window.socket.on('blockly:workspace:changed', function(e){
+    _updateWorkspace(e);
+
+
+  });
+  Blockly.mainWorkspace.getCanvas().addEventListener('blocklyWorkspaceChange', onBlocksChange);
+
+
+
+
+
 };
 
