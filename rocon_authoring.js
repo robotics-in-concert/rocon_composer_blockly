@@ -15,6 +15,9 @@ var _ = require('lodash'),
   mongoose = require('mongoose'),
   Engine = require('./engine');
 
+
+ROCON_AUTHORING_ITEMS_KEY = 'cento_authoring_items';
+
 setupLogger();
 checkEnvVars();
 

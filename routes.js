@@ -187,9 +187,18 @@ module.exports = function(app, db){
   });
 
   app.post('/api/services/save', function(req, res){
-    var ss = new ServiceStore({ros_root: process.env.ROS_PACKAGE_ROOT});
-    ss.exportToROS('package_name', req.body.service, req.body.package).then(function(){
-      res.send('ok');
+    var col = db.collection('settings');
+    col.findOne({key: ROCON_AUTHORING_ITEMS_KEY}, function(err, doc){
+
+      var items = [];
+      if(doc){
+        items = doc.value.data;
+      }
+
+      var ss = new ServiceStore({ros_root: process.env.ROS_PACKAGE_ROOT, workflow_items: items});
+      ss.exportToROS('package_name', req.body.service, req.body.package).then(function(){
+        res.send('ok');
+      });
     });
 
 

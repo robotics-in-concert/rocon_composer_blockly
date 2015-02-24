@@ -53,6 +53,9 @@ var Engine = function(opts){
 
   this.publish_queue = [];
 
+
+  this.globals = {};
+
   var retry_op = Utils.retry(function(){
     engine.log('trying to connect to ros ' + process.env.ROCON_AUTHORING_ROSBRIDGE_URL);
     var connected = false;
@@ -136,6 +139,14 @@ Engine.prototype.getMessageDetails = function(type, cb){
   request(url, {qs: {type: type}, json: true}, function(e, res, body){
     cb(null, body);
   });
+};
+
+Engine.prototype.globalSet = function(k, v){
+  this.globals[k] = v;
+};
+
+Engine.prototype.globalGet = function(k){
+  return this.globals[k];
 };
 
 Engine.prototype.unsubscribe = function(topic){

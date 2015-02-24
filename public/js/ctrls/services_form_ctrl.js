@@ -1,4 +1,5 @@
-var R = require('ramda')
+var R = require('ramda'),
+  _ = require('lodash')
   $ = require('jquery'),
   Utils = require('../utils'),
   schema = require('../schema/service_form');
@@ -168,6 +169,7 @@ module.exports = function($scope, blocksStore, $http, serviceAuthoring, $statePa
 
 
     var v = editor.getValue();
+
 
     serviceAuthoring.saveService(v, destPackage).then(function(){
       alert('saved');

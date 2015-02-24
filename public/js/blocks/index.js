@@ -321,3 +321,4 @@ require('./ros_requester');
 require('./ros_service');
 require('./utils.js');
 require('./prezi.js');
+require('./engine_global');
