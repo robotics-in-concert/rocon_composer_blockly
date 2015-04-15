@@ -30,7 +30,9 @@
     "highlightjs": "~8.4.0",
     "vkbeautify-wrapper": "*",
     "angular-sanitize": "~1.3.10",
-    "jsonselect": "~0.2.1"
+    "jsonselect": "~0.2.1",
+    "polymer": "Polymer/polymer#~0.5.5",
+    "paper-button": "Polymer/paper-button#~0.5.5"
   },
   "overrides": {
     "jsonselect": {

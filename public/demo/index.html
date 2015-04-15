@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+
+<head>
+
+  <title>unquote</title>
+
+  <meta name="viewport" 
+  content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../components/webcomponentsjs/webcomponents.js">
+  </script>
+
+  <link rel="import" href="../components/font-roboto/roboto.html">
+  <link rel="import" href="../components/paper-button/paper-button.html">
+  <link rel="import" href="../polymer_components/rocon-button.html">
+
+  <style>
+  html,body {
+    height: 100%;
+    margin: 0;
+    font-family: 'RobotoDraft', sans-serif;
+  }
+  .container {
+    width: 80%;
+    margin: 50px auto;
+  }
+  @media (min-width: 481px) {
+    #tabs {
+      width: 200px;
+    }
+    .container {
+      width: 400px;
+    }
+  }
+  </style>
+
+</head>
+
+<body unresolved>
+  <template id="tpl0" is="auto-binding">
+    <style>
+      #container {
+        
+
+      }
+
+    </style>
+    <div id="container" style="height:100%;" vertical layout>
+      <div id="container" style="height:100%;" horizontal layout>
+        <div style="color: {{color}};">{{foo}}</div>
+        <rocon-button flex on-tap="{{debug2}}">Button1</rocon-button>
+      </div>
+      <div id="container" style="height:100%;" horizontal layout>
+        <rocon-button flex on-tap="{{debug2}}">Buttonx</rocon-button>
+        <rocon-button flex on-tap="{{debug2}}">Buttonx</rocon-button>
+      </div>
+      <div id="container" style="height:100%;" horizontal layout>
+        <rocon-button flex on-tap="{{debug2}}">Buttony</rocon-button>
+        <rocon-button flex on-tap="{{debug2}}">Buttony</rocon-button>
+      </div>
+
+    </div>
+  </template>
+  <script>
+    var scope = document.querySelector('#tpl0');
+    console.log(scope);
+
+    scope.foo = "Some value"
+
+    scope.change_attr = function(){
+
+    };
+
+    scope.debug = function(e){
+      scope.foo = ""+new Date();
+      scope.color = "blue";
+
+
+    };
+    scope.debug2 = function(e){
+      scope.foo = ""+new Date();
+      scope.color = "red";
+
+
+    };
+  </script>
+</body>
+
+
+</html>

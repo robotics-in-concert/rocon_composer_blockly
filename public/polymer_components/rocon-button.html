@@ -1,0 +1,34 @@
+
+
+<link rel="import" href="../components/polymer/polymer.html">
+<!-- <link rel="import" href="../components/paper-button/paper-button.html"> -->
+<link rel="import" href="../components/paper-button/paper-button-base.html">
+<polymer-element name="rocon-button" role="button">
+  <template>
+  <style>
+    :host {
+      display: flex;
+      cursor: pointer;
+
+    }
+    .tile {
+      margin: 4px;
+      border: solid 1px #aaa;
+
+    }
+
+
+
+  </style>
+  <div class="tile" horizontal layout center-justified center flex>
+    <div><content></content></div>
+  </div>
+  <!-- <paper-button flex raised>Button</paper-button></div> -->
+  </template>
+
+
+  <script>
+    Polymer({});
+  </script>
+
+</polymer-element>
